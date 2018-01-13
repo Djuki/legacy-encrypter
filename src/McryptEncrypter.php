@@ -72,7 +72,7 @@ class McryptEncrypter extends BaseEncrypter implements EncrypterContract
      */
     public function encrypt($value)
     {
-        $iv = mcrypt_create_iv($this->getIvSize(), $this->getRandomizer());
+        $iv = @mcrypt_create_iv($this->getIvSize(), $this->getRandomizer());
 
         $value = base64_encode($this->padAndMcrypt($value, $iv));
 
@@ -101,7 +101,7 @@ class McryptEncrypter extends BaseEncrypter implements EncrypterContract
     {
         $value = $this->addPadding(serialize($value));
 
-        return mcrypt_encrypt($this->cipher, $this->key, $value, MCRYPT_MODE_CBC, $iv);
+        return @mcrypt_encrypt($this->cipher, $this->key, $value, MCRYPT_MODE_CBC, $iv);
     }
 
     /**
@@ -136,7 +136,7 @@ class McryptEncrypter extends BaseEncrypter implements EncrypterContract
     protected function mcryptDecrypt($value, $iv)
     {
         try {
-            return mcrypt_decrypt($this->cipher, $this->key, $value, MCRYPT_MODE_CBC, $iv);
+            return @mcrypt_decrypt($this->cipher, $this->key, $value, MCRYPT_MODE_CBC, $iv);
         } catch (Exception $e) {
             throw new DecryptException($e->getMessage());
         }
@@ -189,7 +189,7 @@ class McryptEncrypter extends BaseEncrypter implements EncrypterContract
      */
     protected function getIvSize()
     {
-        return mcrypt_get_iv_size($this->cipher, MCRYPT_MODE_CBC);
+        return @mcrypt_get_iv_size($this->cipher, MCRYPT_MODE_CBC);
     }
 
     /**
