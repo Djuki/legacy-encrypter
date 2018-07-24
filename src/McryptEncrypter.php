@@ -59,7 +59,7 @@ class McryptEncrypter extends BaseEncrypter implements EncrypterContract
     public static function supported($key, $cipher)
     {
         return defined('MCRYPT_RIJNDAEL_128') &&
-                ($cipher === MCRYPT_RIJNDAEL_128 || $cipher === MCRYPT_RIJNDAEL_256);
+            ($cipher === MCRYPT_RIJNDAEL_128 || $cipher === MCRYPT_RIJNDAEL_256);
     }
 
     /**
@@ -70,7 +70,7 @@ class McryptEncrypter extends BaseEncrypter implements EncrypterContract
      *
      * @throws \Illuminate\Contracts\Encryption\EncryptException
      */
-    public function encrypt($value)
+    public function encrypt($value, $serialize = true)
     {
         $iv = @mcrypt_create_iv($this->getIvSize(), $this->getRandomizer());
 
@@ -110,7 +110,7 @@ class McryptEncrypter extends BaseEncrypter implements EncrypterContract
      * @param  string  $payload
      * @return string
      */
-    public function decrypt($payload)
+    public function decrypt($payload, $unserialize = true)
     {
         $payload = $this->getJsonPayload($payload);
 
